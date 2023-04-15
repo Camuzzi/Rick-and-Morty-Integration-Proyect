@@ -1,0 +1,24 @@
+.nvContainer {
+    display: flex;
+    margin-bottom: 25px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-top: solid #39ff14 1px;
+    border-bottom: solid #39ff14 1px;
+    padding: 5px 0px;
+}
+
+.random {
+    position: relative;
+    left: 0px;
+    border: solid rgb(201, 8, 201) 1px;
+    border-radius: 7px;
+    background: rgb(44, 46, 49);
+    color: #34c514;
+    font-size: 12px;
+}
+
+.random:hover {
+    box-shadow: inset 0 0 10px #86da78;
+}
