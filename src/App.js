@@ -1,17 +1,50 @@
 import './App.css'
-import Cards from './components/Cards/Cards.jsx'
-import NavBar from './components/NavBar/navbar';
-import About from './components/About/About';
-import Detail from "./components/Detail/Detail.jsx"
 
-import styles from "../src/components/App.module.css";
-import { useState } from 'react';
-import { Route,Routes } from 'react-router-dom';
+import Home from "./views/Home/home.jsx"
+import NavBar from './components/NavBar/navbar.jsx';
+import About from "./views/About/About.jsx";
+import Detail from "./views/Detail/Detail.jsx"
+
+import LandingPage from './views/Landing/landing';
+import Favorites from './views/Favorites/favorites';
+import ErrorPage from './views/Error/errorpage';
+
+//import styles from "../src/components/App.module.css";
+import {useState, useEffect} from "react";
+import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
+
 
 function App () {
+  const location = useLocation();
   const [input, setInput] = useState("");
   const [characters,setCharacters] = useState([]);
 
+
+  //*Login
+  const navigate = useNavigate();
+  const [access, setAccess] = useState(true);
+  const username = "ejemplo@gmail.com";
+  const password = "1password";
+
+  function loginHandler(userData) {
+    if (userData.password === password && userData.email === username) {
+      setAccess(true);
+      navigate("/home");
+    }
+  }
+
+  useEffect(() => {
+    !access && navigate("/");
+  }, [access]);
+  //*
+
+  //? LOGOUT
+  function logoutHandler() {
+    setAccess(false);
+    navigate("/");
+  }
+
+  //?
 
   function onChange(e) {
     e.preventDefault();
@@ -70,16 +103,24 @@ function App () {
   }
 
   return (
-    <div className={styles.divPrincipal} style={{ padding: '25px' }}>    
-       <NavBar 
+    <div className="App">    
+
+       {location.pathname !== "/" &&(
+        <NavBar 
         onSearch={onSearch}
         onChange={onChange}
         random={randomCharacter}
+        logout={logoutHandler}
        />
+       )}
+
        <Routes>
-          <Route path="/home" element={<Cards characters={characters} onClose={onClose} />} />
-          <Route path="/about" element={<About />} />
+          <Route exact path="/" element={<LandingPage login={loginHandler} />} />
+          <Route path="/home" element={<Home characters={characters} onClose={onClose} />} />
           <Route path="/detail/:detailId" element={<Detail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/favs" element={<Favorites />} />
+          <Route path="*" element={<ErrorPage />} />
        </Routes>
     </div>
   )
